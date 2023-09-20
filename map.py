@@ -1,5 +1,11 @@
 from enum import Enum, auto
 from typing import List
+from dataclasses import dataclass
+
+@dataclass
+class DirectionItem:
+    title: str
+
 
 
 class Environment(Enum):
@@ -8,10 +14,10 @@ class Environment(Enum):
 
 
 class Direction(Enum):
-    NORTH = auto()
-    SOUTH = auto()
-    EAST = auto()
-    WEST = auto()
+    NORTH = DirectionItem(title="Север")
+    SOUTH = DirectionItem(title="Юг")
+    EAST = DirectionItem(title="Восток")
+    WEST = DirectionItem(title="Запад")
 
 
 ENV_TO_RUS = {
