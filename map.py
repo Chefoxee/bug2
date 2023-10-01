@@ -25,16 +25,17 @@ class Direction(Enum):
     WEST = DirectionItem(title="Запад")
 
 
-ENV_TO_RUS = {
-    Environment.FOREST: "Лес",
-    Environment.DESERT: "Пустыня",
-}
-
-
 class Location:
 
     def __init__(self, environment: Environment):
         self.environment = environment
+
+    @classmethod
+    def from_env_title(cls, title: str) -> 'Location':
+        for env in Environment:
+            if env.value.title == title:
+                return cls(environment=env)
+        raise ValueError
 
 
 class Point:
@@ -42,6 +43,13 @@ class Point:
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
+
+    def dump(self) -> dict:
+        return {"x": self.x, "y": self.y}
+
+    @classmethod
+    def load(cls, data: dict) -> 'Point':
+        return cls(x=data["x"], y=data["y"])
 
 
 class Map:
@@ -57,6 +65,20 @@ class Map:
              ]
         ]
         self.position = Point(0, 0)
+
+    def dump(self):
+        return {
+            "position": self.position.dump(),
+            "zones": [[location.environment.value.title for location in row] for row in self.zones],
+        }
+
+    @classmethod
+    def load(cls, data: dict) -> 'Map':
+        map = Map()
+        map.position = Point.load(data["position"])
+        map.zones = [[Location.from_env_title(env_title) for env_title in row] for row in data["zones"]]
+        map.map_size = len(data["zones"])
+        return map
 
     def get_current_environment(self) -> str:
         x = self.position.x
