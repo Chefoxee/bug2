@@ -22,4 +22,4 @@ class Game:
         print(f"Вы находиесь в локации: {self.map.get_current_environment()}")
         passages = self.map.get_passages()
         for direction, environment in passages.items():
-            print(f"На {direction.value.title}е находится {environment}")
+            print(f"На {direction.value.title}е находится {environment.value.title}")
