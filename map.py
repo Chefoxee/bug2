@@ -6,6 +6,7 @@ from dataclasses import dataclass
 @dataclass
 class DirectionItem:
     title: str
+    key: str
 
 
 @dataclass
@@ -19,10 +20,17 @@ class Environment(Enum):
 
 
 class Direction(Enum):
-    NORTH = DirectionItem(title="Север")
-    SOUTH = DirectionItem(title="Юг")
-    EAST = DirectionItem(title="Восток")
-    WEST = DirectionItem(title="Запад")
+    NORTH = DirectionItem(title="Север", key="W")
+    SOUTH = DirectionItem(title="Юг", key="S")
+    EAST = DirectionItem(title="Восток", key="D")
+    WEST = DirectionItem(title="Запад", key="A")
+
+    @staticmethod
+    def from_key(key: str) -> 'Direction':
+        for dir in Direction:
+            if dir.value.key == key:
+                return dir
+        raise ValueError
 
 
 class Location:
@@ -87,6 +95,8 @@ class Map:
         return env.value.title
 
     def get_passages(self) -> dict[Direction, Environment]:
+        """ Все доступные варианты движения """
+
         passages: dict[Direction, Environment] = {}
 
         x = self.position.x

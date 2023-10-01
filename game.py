@@ -1,4 +1,4 @@
-from map import Map
+from map import Direction, Map
 from player import Player
 
 
@@ -8,6 +8,27 @@ class Game:
         self.player = Player()
         # Записываем текущее состояние игры
         pass
+
+    def decision(self) -> 'Direction':
+        # Запрос направления
+        passages = self.map.get_passages()
+        print(f"\nДвижение доступно на:\n")
+        for direction, environment in passages.items():
+            print(f"{direction.value.key} - {direction.value.title}")
+        key = input(f"Выберите направление - ")
+        dir = Direction.from_key(key)
+        return dir
+
+    def action(self, direction: Direction):
+        if direction == Direction.NORTH:
+            self.map.position.y -= 1
+        if direction == Direction.SOUTH:
+            self.map.position.y += 1
+        if direction == Direction.EAST:
+            self.map.position.x += 1
+        if direction == Direction.WEST:
+            self.map.position.x -= 1
+
 
     def dump(self) -> dict:
         return {
@@ -23,13 +44,14 @@ class Game:
         return game
 
     def run(self):
-        self.step()
+        while True:
+            self.step()
 
     def step(self):
         self.display_actual_info()
-        # Запрашиваем у игрока его решение
-        # Применяем его решение
-        pass
+        decision = self.decision()
+        self.action(decision)
+
 
     def display_actual_info(self):
         print(f"Вы находиесь в локации: {self.map.get_current_environment()}")
