@@ -1,16 +1,21 @@
-from enum import Enum, auto
+from enum import Enum
 from typing import List
 from dataclasses import dataclass
+
 
 @dataclass
 class DirectionItem:
     title: str
 
 
+@dataclass
+class EnvironmentItem:
+    title: str
+
 
 class Environment(Enum):
-    FOREST = auto()
-    DESERT = auto()
+    FOREST = EnvironmentItem(title="Лес")
+    DESERT = EnvironmentItem(title="Пустыня")
 
 
 class Direction(Enum):
@@ -57,7 +62,7 @@ class Map:
         x = self.position.x
         y = self.position.y
         env = self.zones[y][x].environment
-        return ENV_TO_RUS[env]
+        return env.value.title
 
     def get_passages(self) -> dict[Direction, Environment]:
         passages: dict[Direction, Environment] = {}
