@@ -9,6 +9,19 @@ class Game:
         # Записываем текущее состояние игры
         pass
 
+    def dump(self) -> dict:
+        return {
+            "map": self.map.dump(),
+            "player": {},
+        }
+
+    @classmethod
+    def load(cls, data: dict) -> 'Game':
+        game = Game()
+        game.map = Map.load(data["map"])
+        game.player = Player()
+        return game
+
     def run(self):
         self.step()
 
