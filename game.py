@@ -1,13 +1,22 @@
+import json
 from map import Direction, Map
 from player import Player
+
+
 
 
 class Game:
     def __init__(self):
         self.map = Map()
         self.player = Player()
-        # Записываем текущее состояние игры
-        pass
+
+    def save(self):
+        with open("save.json", "w") as fh:
+            json.dump(self.dump(), fh)
+
+
+
+
 
     def decision(self) -> 'Direction':
         # Запрос направления
@@ -45,6 +54,7 @@ class Game:
 
     def run(self):
         while True:
+            self.save()
             self.step()
 
     def step(self):
